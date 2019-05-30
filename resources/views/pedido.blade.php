@@ -1,20 +1,21 @@
 @extends('layout.app', ["current" => "home"])
 
 @section('body')
-
+<!-- Btn de busca-->
 <div class="jumbotron bg-light border">
-<br>
+    <br>
    <h1 class="title">Selecione o Produto</h1>
    <form method="get">
         <div class="input-group">
                 <input class="form-control mb-2 mr-sm-2" id="produto" style="max-width:200px;" placeholder="digite o nome ou codigo do produto">
                 <input class="form-control mb-2 mr-sm-2" id="qte" style="max-width:170px;" placeholder="digite a quantidade">
-                <button id="BuscaProduto" class="btn btn-sm btn-primary"  data-toggle="modal" data-target="#exampleModal" type="submit"> Buscar </button>
+                <button id="BuscaProduto" class="btn btn-sm btn-primary"  type="submit"> Buscar </button>
         </div>
     </form>
+    <!-- Final do Btn de busca-->
    <br>
    <h3>Produtos Adicionados:</h3>
-   		<table class="table table-ordered table-hover" id="tabelaClientes">
+   		<table class="table table-ordered table-hover" id="Tpedido">
             <thead>
                 <tr>
                     <th scope="col">Codigo</th>
@@ -31,47 +32,54 @@
                 
         </table>
 </div>
+
+<!-- Totalizadores-->
 <div class="jumbotron bg-light border ">
-<h3>Totalizadores do pedido</h3>
-<div class="input-group">
-    <h5> &ensp; Valor Total: &ensp; </h5>
-    <input class="form-control" id="disabledInput" type="text" style="max-width:120px;"  disabled>
-    <h5> &ensp; Desconto: &ensp; </h5>
-    <input class="form-control mb-2 mr-sm-2" id="produto" style="max-width:80;">
+    <div class="totalizador">
+        <h3>Totalizadores do pedido</h3>
+        <div class="input-group">
+            <h5> &ensp; Valor Total: &ensp; </h5>
+            <input class="form-control" id="disabledInput" type="text" style="max-width:120px;"  disabled>
+            <h5> &ensp; Desconto: &ensp; </h5>
+            <input class="form-control mb-2 mr-sm-2" id="Desconto" style="max-width:80;">
+        </div>
+            <br>
+            
+            <button id="fecharPedido" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModal" > Fechar Pedido </button> 
+            <button class="btn btn-sm btn-danger"> Cancelar </button>
+    </div>
 </div>
-    <br>
-    
-	<button class="btn btn-sm btn-primary"> Fechar Pedido </button> 
-	<button class="btn btn-sm btn-danger"> Cancelar </button>
-</div>
+<!-- Final Totalizadores-->
 
 <!-- Modal para selecionar cliente-->
 
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-  Launch demo modal
-</button>
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+<div class="modal fade" id="modalPedido" tabindex="-1" role="dialog" aria-labelledby="modalPedido" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Pedido de Venda</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Pedido de venda</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <h5>Inclua as informações do pedido</h5>
             <div class="form-group">
-                            <label for="cliente" class="control-label">Cliente:</label>
+                            <label for="cliente"  class="control-label">Cliente:</label>
                             <div class="input-group">
-                                <select class="form-control" id="cliente" >
+                                <select style="max-width:200px;" class="form-control" id="cliente" >
                                 </select>    
                             </div>
                         </div>
+                <h5>Escolha a forma de pagamento:</h5>
+                <input id="pagamento" class="form-control mb-2 mr-sm-2" style="max-width:200px;" placeholder="Forma de pagamento">
+            </div>
+            <div>
             </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+            <form method="get">
+                <button id="dados" class="btn  btn-primary"  type="submit"> Incluir </button>
+            </form>
       </div>
     </div>
   </div>
@@ -79,9 +87,36 @@
 
 <!--Final Modal-->
 
+<div class="modal" id="sucesso" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <p>Peido Efetuado com sucesso</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 @section('javascript')
 <script type="text/javascript">
+ 
+ document.getElementById('Desconto').value=0;
+itens = new Array ();
+pagamento ="";
+cliente="";
 
+ function novoItem(id,desc,preco,qte){
+    var produto = new Object();
+    produto.id=id;
+    produto.desc=desc;
+    produto.preco=preco;
+    produto.qte=qte;
+    produto.valort=preco*qte;
+    itens.push(produto);
+ }
 
 
 function montarLinha(n,id,preco,qte,valort) {
@@ -95,7 +130,8 @@ function montarLinha(n,id,preco,qte,valort) {
               '<button class="btn btn-sm btn-danger" type="submit" id="salvarP"> Apagar </button> ' +
             "</td>" +
             "</tr>";
-        return linha;
+            novoItem(id,n,preco,qte);
+            return linha;
     }
 
     function BuscarProduto(produto,qte) {
@@ -107,7 +143,7 @@ function montarLinha(n,id,preco,qte,valort) {
                     var preco=produtos[i].preco;
                     var valort=preco*qte;
                     linha = montarLinha(n,id,preco,qte,valort);
-                    $('#tabelaClientes>tbody').append(linha);
+                    $('#tpedido>tbody').append(linha);
                     oldpreco = document.getElementById('disabledInput').value;
                     
                     if(document.getElementById("disabledInput").value == ""){
@@ -128,9 +164,6 @@ function montarLinha(n,id,preco,qte,valort) {
         });        
     }  
 
-    function salvaItem(){
-
-    }
 
     // Evento que é executado ao clicar no botão de enviar
     document.getElementById("BuscaProduto").onclick = function(e) { 
@@ -151,26 +184,100 @@ function montarLinha(n,id,preco,qte,valort) {
     }
 
 
-    function SalvarPedido() {
-        rec = { 
-            inc: $("#inc").val(), 
-            venc: $("#venc").val(), 
-            valor: $("#valor").val(), 
-            cliente:$("#cliente").val(), 
-            observacao: $("#observacao").val() 
-        };
-       
-        $.post("/api/receber", rec, function(data) {
-            receber = JSON.parse(data);
-            console.log(rec.cliente);
-            receber.cliente_id=document.getElementById('i'+rec.cliente+'').innerHTML;
-            linha = montarLinha2(receber);
-            $('#tabelaReceber>tbody').append(linha);            
-        });
+    document.getElementById("dados").onclick = function(e) { 
+         cliente= document.getElementById("cliente").value;
+         pagamento= document.getElementById("pagamento").value;
+        e.preventDefault();
+        $('#modalPedido').modal('hide');
     }
-    $(function(){
-        carregarClientes();
-    })
+
+    document.getElementById("fecharPedido").onclick = function(e) { 
+        console.log(cliente);
+        e.preventDefault();
+        salvarPedido();
+    }
+
+
+    function salvarPedido() {
+
+        ped ={
+            idCliente:cliente,
+            pag:pagamento,
+            valort:document.getElementById("disabledInput").value,
+            desconto:document.getElementById("Desconto").value
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/api/pedido/novo",
+            context: this,
+            data: ped,
+            success: function(data) {
+                ped = JSON.parse(data);
+                salvarItens(ped.id);
+                $("#tpedido td").remove(); 
+                  produto= document.getElementById("produto").value ="";
+                  qte= document.getElementById("qte").value ="";
+                document.getElementById('disabledInput').value = "";
+                $('#sucesso').modal('show');
+                $('#sucesso').modal('hiden');
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        }); 
+       
+    }
+
+    function salvarItens(id){
+        for(i=0;i<itens.length;i++) {
+            it={
+                desc: itens[i].desc,
+                id_ped: id,
+                id_prod: itens[i].id,
+                qte: itens[i].qte,
+                vlr: itens[i].valort
+            };
+            var v1=itens[i].id;
+            var v2=itens[i].qte;
+
+            console.log(it);
+
+            $.ajax({
+                type: "POST",
+                url: "/api/pedido/itens",
+                context: this,
+                data: it,
+                success: function(data) {
+                    baixar(v1,v2);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        } 
+       
+    }
+    
+    function baixar(id,qte) {
+        $.ajax({
+            type: "POST",
+            url: "/api/produto/estoque/" + id+"/"+qte,
+            context: this,
+            success: function() { 
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });        
+    }
+
+
+
+    $(document).ready(function() {
+    carregarClientes();
+    $('#modalPedido').modal('show');
+})
 
 </script>
 @endsection

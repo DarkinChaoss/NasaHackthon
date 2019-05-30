@@ -23,4 +23,7 @@ Route::resource('/produtos', 'ControladorProduto');
 Route::resource('/clientes', 'ControladorCliente');
 Route::resource('/receber', 'ControladorReceber');
 Route::resource('/pedido', 'ControladorPedido');
+Route::resource('/pedido/itens', 'ControladorPedidoItens');
+Route::post('/produto/estoque/{id}/{qte}', 'ControladorPedidoItens@baixar');
+Route::resource('/pedido/novo', 'ControladorPedido');
 Route::post('/receber/baixar/{id}', 'ControladorReceber@baixar');

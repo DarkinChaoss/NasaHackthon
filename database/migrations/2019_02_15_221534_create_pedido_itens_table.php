@@ -15,13 +15,13 @@ class CreatePedidoItensTable extends Migration
     {
         Schema::create('pedido_itens', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('descricao');
             $table->integer('pedido_id')->unsigned();
             $table->foreign('pedido_id')->references('id')->on('pedidos');
             $table->integer('produto_id')->unsigned();
             $table->foreign('produto_id')->references('id')->on('produtos');
             $table->integer('qte');
             $table->double('vlr_total');
-            
             $table->timestamps();
         });
     }

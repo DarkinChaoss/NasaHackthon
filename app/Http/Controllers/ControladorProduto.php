@@ -45,12 +45,7 @@ class ControladorProduto extends Controller
         return json_encode($prod);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function show($id)
     {
         $prod = Produto::find($id);

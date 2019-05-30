@@ -17,5 +17,8 @@
         "jquery": "^3.2",
         "laravel-mix": "^2.0",
         "lodash": "^4.17.4"
+    },
+    "dependencies": {
+        "bootbox": "github:makeusabrew/bootbox#v5.0.0"
     }
 }

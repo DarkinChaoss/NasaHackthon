@@ -19,7 +19,6 @@ class CreatePedidosTable extends Migration
             $table->foreign('cliente_id')->references('id')->on('clientes');
             $table->double('valor_total', 8, 2);
             $table->integer('desconto')->nullable();;
-            $table->date('data_inc');
             $table->timestamps();
         });
     }

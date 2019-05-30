@@ -1,9 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
-
 use App\receber_titulo;
 use App\cliente;
 use DB;
@@ -118,9 +116,6 @@ class ControladorReceber extends Controller
       $rec = receber_titulo::find($id);
       $rec->baixado=1;
       $rec->save();
-
-      return response('baixou sá merda', 200);
-       
     }
 
 
