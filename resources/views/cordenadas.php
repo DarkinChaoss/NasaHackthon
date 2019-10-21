@@ -1,97 +1,46 @@
-@extends('layout.app', ["current" => "receber" ])
+@extends('layout.app', ["current" => "cordenadas" ])
 
 @section('body')
 
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">Contas a Receber</h5>
-        <br>
-        <div class="table-responsive">
-        <table class="table table-ordered table-hover " id="tabelaReceber">
-            <thead>
-                <tr>
-                        <th scope="col">Codigo</th>
-                        <th scope="col">Data de inclusão</th>
-                        <th scope="col">Data de vencimento</th>
-                        <th scope="col">valor</th>
-                        <th scope="col">Observação</th>
-                        <th id="testes"class="teste"  scope="col">Estado do titulo</th>
-                        <th scope="col">Cliente</th>
-                        <th scope="col">Ações</th>
-                </tr>
-            </thead>
-                
-            <tbody>
-                           
-            </tbody>
-                
-        </table>
-        </div>
-       
-    </div>
-    <div class="card-footer">
-        <button class="btn btn-sm btn-primary" role="button" onClick="novoReceber()">Novo Receber</a>
-    </div>
-</div>
+   <div id="map"></div>
+    <!-- Footer -->
+	<footer class="page-footer font-small blue pt-4">
+		<div class="container-fluid text-center text-md-left footer">
+			<div class="row">
+				<div class="col-md-6 mt-md-0 mt-3">
+					<h5 class="text-uppercase"></h5>
+					<p id="foot">Project designed for hackathon NasaSpaceApps</p>
+				</div>
+			</div>
+			<div class="box">
+				<img id="imgLogo"src="{{ asset('imagens/capivara.png')}}" alt="">
+				<h3>Curitiba 2019</h3>
+			</div>
+		</div>
+	</footer>
 
-<div class="modal" tabindex="-1" role="dialog" id="dlgReceber">
-    <div class="modal-dialog" role="document"> 
-        <div class="modal-content">
-            <form class="form-horizontal" id="formReceber">
-                <div class="modal-header">
-                    <h5 class="modal-title">Inclusão de contas a receber</h5>
-                </div>
-                <div class="modal-body">
 
-                    <input type="hidden" id="id" class="form-control">
-                    <div class="form-group">
-                        <label for="quantidadeProduto" class="control-label">Data de inclusão</label>
-                        <div class="input-group">
-                            <input type="date" class="form-control" id="inc" placeholder="Data de inclusão">
-                        </div>
-                    </div>
-                   
-                     <div class="form-group">
-                        <label for="quantidadeProduto" class="control-label">Data de vencimento</label>
-                        <div class="input-group">
-                            <input type="date" class="form-control" id="venc" placeholder="Data de vencimento">
-                        </div>
-                    </div>
+	<script type="text/javascript">
+		// Initialize and add the map
+		function initMap() {
 
-                    <div class="form-group">
-                        <label for="precoProduto" class="control-label">Valor</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="valor" placeholder="Valor">
-                        </div>
-                    </div>
+      $.getJSON('/api/getdados', function(data) { 
+            cords = JSON.parse(data);
+            console.log(cords);
+        });
 
-                    <div class="form-group">
-                        <label for="cliente" class="control-label">Cliente</label>
-                        <div class="input-group">
-                            <select class="form-control" id="cliente" >
-                            </select>    
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="quantidadeProduto" class="control-label">Observação</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="observacao" placeholder="Observação do titulo">
-                        </div>
-                    </div>                    
-
-                   
-
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Salvar</button>
-                    <button type="cancel" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
+		  // The location of Uluru
+		  var uluru = {lat: -25.344, lng: 131.036};
+		  // The map, centered at Uluru
+		  var map = new google.maps.Map(
+			  document.getElementById('map'), {zoom: 4, center: uluru});
+		  // The marker, positioned at Uluru
+		  var marker = new google.maps.Marker({position: uluru, map: map});
+		}
+	</script>
+	<script async defer
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAQLLAm_G68rOvnxkUKYTwnh4-w30GCnQQ&callback=initMap">
+    </script>
 
 @endsection
      

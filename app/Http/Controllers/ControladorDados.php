@@ -3,16 +3,40 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Pedido_itens;
-use App\Produto;
+use App\Cordenada;
 
-class ControladorPedidoItens extends Controller
+class ControladorDados extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function get()
+    {
+        $cords = Cordenada::take(15000)->get();
+        return $cords->toJson();
+    }
+
+    public function getlimit($limit)
+    {
+        $cords = Cordenada::take($limit)->get();
+        return $cords->toJson();
+    }
+
+    public function data($data)
+    {
+        $cords = Cordenada::take(1000)->whereBetween('dia',["{$data}","$data"])
+        ->get();
+        return $cords->toJson();
+    }
+    public function dianoite($dianoite)
+    {
+        $cords = Cordenada::take(1000)->where('daynight', $dianoite)
+        ->get();
+        return $cords->toJson();
+    }
+
+    public function indexView()
+    {
+        return view('cordenadas');
+    }
+
     public function index()
     {
         //
@@ -36,30 +60,18 @@ class ControladorPedidoItens extends Controller
      */
     public function store(Request $request)
     {
-        $ped = new Pedido_itens();
-        $ped->descricao = $request->input('desc');
-        $ped->pedido_id = $request->input('id_ped');
-        $ped->produto_id = $request->input('id_prod');
-        $ped->qte = $request->input('qte');
-        $ped->vlr_total = $request->input('vlr');
-        $ped->save();
+        //
     }
 
-    public function baixar($id,$qte)
-    {
-      $item = Produto::find($id);
-      $item->estoque -= $qte;
-      $item->save();
-    }
-
-
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function show($id)
     {
-        $ped = Pedido_itens::find($id);
-        if (isset($ped)) {
-            return json_encode($ped);            
-        }
-        return response('receber não encontrado', 404);
+        //
     }
 
     /**

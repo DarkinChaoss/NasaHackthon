@@ -16,9 +16,13 @@ Route::get('/', function () {
 });
 
 Route::get('/produtos', 'ControladorProduto@indexView');
+Route::get('/dados', 'ControladorDados@indexView');
+Route::get('/dados/data/{data}', 'ControladorDados@data');
+Route::get('/dados/dianoite/{dianoite}', 'ControladorDados@dianoite');
 Route::get('/categorias', 'ControladorCategoria@index');
 Route::get('/receber', 'ControladorReceber@indexView');
 Route::get('/pagar', 'ControladorPagar@indexView');
+Route::get('/tarefas', 'ListaTarefas@indexJson');
 Route::get('/categorias/novo', 'ControladorCategoria@create');
 Route::post('/categorias', 'ControladorCategoria@store');
 Route::get('/categorias/apagar/{id}', 'ControladorCategoria@destroy');
